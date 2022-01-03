@@ -12,3 +12,15 @@ export const getData = () => {
       data
     }
   };
+export const postData=(data)=>{
+  return{
+    type:"POST",
+    data
+  }
+}
+export const deleteData=(id)=>{
+  return{
+    type:"DELETE",
+    id
+  }
+}

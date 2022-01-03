@@ -1,10 +1,10 @@
 import {call,put,takeLatest,fork} from 'redux-saga/effects'
-import { GetRequest,PutRequest } from '../Request/GetReqest'
+import { GetRequest,PutRequest,PostRequest,DeleteRequest} from '../Request/GetReqest'
 
 function* GetRequests(){
     try{
         let Response= yield call(GetRequest)
-        yield put({type:'POST',data:Response})
+        yield put({type:'GETOPERATION',data:Response})
     }catch(err){
         console.log(err)
     }
@@ -23,16 +23,27 @@ function* PutRequests({id,data}){
     }
 }
 
-// function* PostRequests({data}){
-//         try{
-//         let Res=yield call(PostRequest,data)
-//         if(Res.status === 200){ 
-//             yield put({type:'POSTDATA',data:data})
-//         }
-//         }catch(err){
-//         console.log(err)
-//         }
-// }
+function* PostRequests({data}){
+        try{
+        let Res=yield call(PostRequest,data)
+        if(Res.status === 200){ 
+            yield put({type:'POSTOPERATION',data:data})
+        }
+        }catch(err){
+        console.log(err)
+        }
+}
+
+function* DeleteRequests({id}){
+    try{
+        let Res=yield call(DeleteRequest,id)
+        if(Res.status===200){
+            yield put({type:'DELETEOPERATION',id:Res.data})
+        }
+    }catch(err){
+
+    }
+}
 
 function* getWatcherSaga() {
     yield takeLatest("GET", GetRequests);
@@ -42,8 +53,11 @@ function* putWatcherSaga() {
     yield takeLatest("PUT", PutRequests);
   }
 
-// function* postWatcherSaga(){
-//     yield takeLatest('POST',PostRequests);
-// }
+function* postWatcherSaga(){
+    yield takeLatest('POST',PostRequests);
+}
+function* deleteWatcherSaga(){
+    yield takeLatest('DELETE',DeleteRequests)
+}
   
-  export const watcherUserSaga=[fork(getWatcherSaga),fork(putWatcherSaga)]
+  export const watcherUserSaga=[fork(getWatcherSaga),fork(putWatcherSaga),fork(postWatcherSaga),fork(deleteWatcherSaga)]

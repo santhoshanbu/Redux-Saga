@@ -10,7 +10,9 @@ import reducer from './Redux/Reducer/index'
 
 let sagaMiddle=createSagaMiddleware()
 
-let store=compose(applyMiddleware(sagaMiddle))(createStore)(reducer)
+let store=compose(applyMiddleware(sagaMiddle),
+window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+(createStore)(reducer)
 
 sagaMiddle.run(RootSaga)
 

@@ -3,40 +3,38 @@ let initial={data:[]}
 const fetch=(state=initial,action)=>{
     switch(action.type){
         case 'GET':
-            return {...state};
+            return state
          case 'PUT':
-           return  state.data.map((manager,item) =>{
-                           if(manager._id === action.id){ 
-                           let newlist=[...state.data]
-                           newlist.splice(item,1,action.data)
-                           let obj={...state,data:newlist}
-                           return obj
-                       }
-                    }
-                );
-            //  console.log(state)
-            //  return state
-            // console.log('santhosh')
-            // return {...state}
+             const array=[...state.data];
+             for(let i=0;i<array.length;i++){
+                 if(array[i]._id===action.id){
+                    array.splice(i,1,action.data)
+                    return {...state,data:array}
+                 }
+             }
+      
         case 'POST':
+                let newlist=[...state.data];
+            newlist.push(action.data)
+            let newState={
+                ...state,
+                data:newlist
+            }
+            return newState
+            case 'DELETE':
+                const deletearray=[...state.data];
+             for(let i=0;i<deletearray.length;i++){
+                 if(deletearray[i]._id===action.id){
+                    deletearray.splice(i,1)
+                    return {...state,data:deletearray}
+                 }
+             }
+        case 'GETOPERATION':
             return {...state,data:action.data};
         case 'PUTOPERATION':
-            return {
-                ...state
-            };
-            // state.data.map((manager,item) =>{
-            //     console.log(action.id)
-            //            if(manager._id === action.id){ 
-            //            let newlist=[...state.data]
-            //            console.log('clone',newlist)
-            //            newlist.splice(item,1,action.data)
-            //            console.log('modify',newlist)
-            //            let obj={...state,data:newlist}
-            //            return obj
-            //        }
-            //     }
-            // );
-          
+        case 'POSTOPERATION':
+        case 'DELETEOPERATION':
+                 return state;
         default:
             return state;
     }
